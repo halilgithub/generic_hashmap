@@ -5,6 +5,8 @@
 #include <vector>
 #include <optional>
 #include <iostream>
+#include <stdexcept>
+#include <iterator>
 
 template <typename key_type, typename value_type>
 class HashMap
@@ -50,18 +52,26 @@ template <typename key_type, typename value_type>
 typename HashMap<key_type, value_type>::optional_type HashMap<key_type, value_type>::search(key_type key)
 {
     size_type hash_output = hashFunction(key);
-    auto & bucket = mBuckets[hash_output];
-
-    for (auto it = begin(bucket); it != end(bucket); ++it)
-    {
-        if (it->first == key){
-            std::cout << "[INFO] The element exists: (" << it->first << ", " << it->second << ")" << std::endl;
-            return it->second;
+    try{
+        std::cout << "111" << std::endl;
+        auto & bucket = mBuckets[hash_output];
+        std::cout << "222" << std::endl;
+        typename HashMap<key_type, value_type>::list_type::iterator it;
+        for (it = begin(bucket); it != end(bucket); ++it)
+        {
+            std::cout << "333" << std::endl;
+            if (it->first == key){
+                std::cout << "[INFO] The element exists: (" << it->first << ", " << it->second << ")" << std::endl;
+                return it->second;
+            }
         }
-    }
 
-    std::cout << "[INFO] The element with key=" << key << "doesn't exist !" << std::endl;
-    return std::nullopt;
+        std::cout << "[INFO] The element with key=" << key << "doesn't exist !" << std::endl;
+        return std::nullopt;
+    }catch(std::exception &ex){
+        std::cout << ex.what() << std::endl;
+        return std::nullopt;
+    }
 }
 
 template <typename key_type, typename value_type>
@@ -81,8 +91,8 @@ bool HashMap<key_type, value_type>::insert(key_type key, value_type value)
             std::cout << "[SUCCESS] The element has been inserted !" << std::endl;
             ++mSize;
             return true;  // insert operation is successfull
-        }catch (std::exception& ex){
-            std::cerr << ex.what() << std::endl;
+        }catch (std::exception &ex){
+            std::cout << ex.what() << std::endl;
             return false;
         }
     }
