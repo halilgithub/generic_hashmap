@@ -7,6 +7,8 @@
 #include <iostream>
 #include <stdexcept>
 #include <iterator>
+#include <sstream>
+
 
 template <typename key_type, typename value_type>
 class HashMap
@@ -43,7 +45,8 @@ bool HashMap<key_type, value_type>::isEmpty() const
 template <typename key_type, typename value_type>
 typename HashMap<key_type, value_type>::size_type HashMap<key_type, value_type>::hashFunction(key_type key)
 {
-    size_type hash_output = std::hash<key_type>()(key);
+    std::string str_key = static_cast<std::ostringstream*>(&(std::ostringstream() << key))->str();
+    size_type hash_output = std::hash<std::string>()(str_key);
     std::cout << "[SUCCESS] The key is hashed: " << hash_output << std::endl;
     return hash_output;
 }

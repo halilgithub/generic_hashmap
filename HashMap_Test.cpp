@@ -1,7 +1,10 @@
 #include <iostream>
 #include "HashMap.h"
+#include <typeinfo>
+
 
 int main(){
+
 
     HashMap<std::string,int> hmap;
 
