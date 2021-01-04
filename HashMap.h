@@ -34,7 +34,7 @@ public:
 private:
 
     size_type mElementNum = 0;
-    static const size_type mBucketNum = 13;
+    static const size_type mBucketNum = 7;      //  prime number
     std::array<list_type, mBucketNum> mBuckets;
 };
 
@@ -58,7 +58,6 @@ template <typename key_type, typename value_type>
 typename HashMap<key_type, value_type>::optional_type HashMap<key_type, value_type>::search(key_type key)
 {
     size_type bucketIndex = hashFunction(key) % mBucketNum;
-    //std::cout << "[SUCCESS] The key is hashed, bucket index is: " << bucketIndex << std::endl;
 
     if (mBuckets[bucketIndex].size() != 0){
 
@@ -68,13 +67,11 @@ typename HashMap<key_type, value_type>::optional_type HashMap<key_type, value_ty
         for (it = begin(bucket); it != end(bucket); ++it)
         {
             if (it->first == key){
-                //std::cout << "[INFO] The element exists: (" << it->first << ", " << it->second << ")" << std::endl;
                 return it->second;
             }
         }
     }
 
-    //std::cout << "[INFO] The element with key:" << key << " doesn't exist !" << std::endl;
     return std::nullopt;
 
 }

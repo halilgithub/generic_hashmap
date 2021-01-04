@@ -14,8 +14,8 @@ int main(){
 
     std::cout << std::endl;
 
-    bool success = hmap.insert("halil",12);
-    success = hmap.insert("halil",18);
+    bool success = hmap.insert("melanie",12);
+    success = hmap.insert("melanie",18);
     success = hmap.insert("audrey",13);
     success = hmap.insert("ester",14);
     success = hmap.insert("isabella",22);
