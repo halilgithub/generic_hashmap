@@ -33,7 +33,7 @@ public:
 
 private:
 
-    size_type mSize = 0;
+    size_type mElementNum = 0;
     static const size_type mBucketNum = 401;
     std::array<list_type, mBucketNum> mBuckets;
 };
@@ -42,11 +42,8 @@ private:
 template <typename key_type, typename value_type>
 bool HashMap<key_type, value_type>::isEmpty() const
 {
-    std::cout<<"size of vector: "<<mBuckets.size()<<std::endl;
-    //std::cout<<"capacity of vector: "<<mBuckets.capacity()<<std::endl;
-    std::cout<<"capacity of vector: "<<mBuckets.max_size()<<std::endl;
-
-    return (mSize == 0);
+    std::cout<<"size of array: "<<mBuckets.size()<<std::endl;
+    return (mElementNum == 0);
 }
 
 template <typename key_type, typename value_type>
@@ -64,13 +61,12 @@ typename HashMap<key_type, value_type>::optional_type HashMap<key_type, value_ty
     std::cout << "[SUCCESS] The key is hashed, bucket index is: " << bucketIndex << std::endl;
 
     if (mBuckets[bucketIndex].size() != 0){
-        std::cout << "111" << std::endl;
+
         auto & bucket = mBuckets[bucketIndex];
-        std::cout << "222" << std::endl;
         typename HashMap<key_type, value_type>::list_type::iterator it;
+
         for (it = begin(bucket); it != end(bucket); ++it)
         {
-            std::cout << "333" << std::endl;
             if (it->first == key){
                 std::cout << "[INFO] The element exists: (" << it->first << ", " << it->second << ")" << std::endl;
                 return it->second;
@@ -87,7 +83,6 @@ template <typename key_type, typename value_type>
 bool HashMap<key_type, value_type>::insert(key_type key, value_type value)
 {
     auto mapped_value = search(key);
-    std::cout << "111" << std::endl;
 
     if (mapped_value.has_value()){
         std::cout << "[ERROR] The element couldn't be inserted, key already exists !" << std::endl;
@@ -96,13 +91,10 @@ bool HashMap<key_type, value_type>::insert(key_type key, value_type value)
     else
     {
         size_type bucketIndex = hashFunction(key) % mBucketNum;
-        std::cout << "222" << std::endl;
         std::pair <key_type,value_type> element = std::make_pair(key,value);
-        std::cout << "333" << std::endl;
         mBuckets[bucketIndex].emplace_back(element);
-        std::cout << "444" << std::endl;
         std::cout << "[SUCCESS] The element has been inserted !" << std::endl;
-        ++mSize;
+        ++mElementNum;
         return true;  // insert operation is successfull
     }
 }
@@ -121,7 +113,7 @@ bool HashMap<key_type, value_type>::deleteElement(key_type key)
             if (it->first == key){
                 bucket.erase(it);
                 std::cout << "[SUCCESS] The element has been deleted !" << std::endl;
-                --mSize;
+                --mElementNum;
                 return true;  // delete operation is successfull
             }
         }
@@ -149,5 +141,7 @@ void HashMap<key_type, value_type>::printHashMap()
             std::cout << std::endl;
         }
     }
+    std::cout << "Total number of elements in hash map: " << mElementNum << std::endl;
+    std::cout << std::endl;
 }
 

@@ -13,11 +13,12 @@ int main(){
         std::cout << "Hashmap is not empty" << std::endl;
 
     bool success = hmap.insert("halil",12);
-    success = hmap.insert("hali",13);
-    success = hmap.insert("hall",14);
-    success = hmap.insert("hail",15);
-    success = hmap.insert("hail",16);
-    std::cout << success << std::endl;
+    success = hmap.insert("audrey",13);
+    success = hmap.insert("ester",14);
+    success = hmap.insert("halil",18);
+    success = hmap.insert("sebastian",16);
+
+
     hmap.printHashMap();
 
     return 0;
