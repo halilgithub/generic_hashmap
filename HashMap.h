@@ -34,7 +34,7 @@ public:
 private:
 
     size_type mElementNum = 0;
-    static const size_type mBucketNum = 401;
+    static const size_type mBucketNum = 13;
     std::array<list_type, mBucketNum> mBuckets;
 };
 
@@ -42,7 +42,7 @@ private:
 template <typename key_type, typename value_type>
 bool HashMap<key_type, value_type>::isEmpty() const
 {
-    std::cout <<"capacity of hash map (number of buckets): "<< mBuckets.size() << std::endl;
+    std::cout <<"Number of buckets (static const declared ): "<< mBuckets.size() << std::endl;
     return (mElementNum == 0);
 }
 

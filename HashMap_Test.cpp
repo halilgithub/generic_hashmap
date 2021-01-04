@@ -18,7 +18,13 @@ int main(){
     success = hmap.insert("halil",18);
     success = hmap.insert("audrey",13);
     success = hmap.insert("ester",14);
-    success = hmap.insert("sebastian",16);
+    success = hmap.insert("isabella",22);
+    success = hmap.insert("helena",56);
+    success = hmap.insert("marta",11);
+    success = hmap.insert("beatrice",88);
+    success = hmap.insert("magdalena",99);
+    success = hmap.insert("katja",44);
+    success = hmap.insert("laura",33);
     success = hmap.deleteElement("audrey");
 
     auto key = "ester";
