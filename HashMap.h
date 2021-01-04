@@ -42,7 +42,7 @@ private:
 template <typename key_type, typename value_type>
 bool HashMap<key_type, value_type>::isEmpty() const
 {
-    std::cout<<"size of array: "<<mBuckets.size()<<std::endl;
+    std::cout <<"capacity of hash map (number of buckets): "<< mBuckets.size() << std::endl;
     return (mElementNum == 0);
 }
 
@@ -58,7 +58,7 @@ template <typename key_type, typename value_type>
 typename HashMap<key_type, value_type>::optional_type HashMap<key_type, value_type>::search(key_type key)
 {
     size_type bucketIndex = hashFunction(key) % mBucketNum;
-    std::cout << "[SUCCESS] The key is hashed, bucket index is: " << bucketIndex << std::endl;
+    //std::cout << "[SUCCESS] The key is hashed, bucket index is: " << bucketIndex << std::endl;
 
     if (mBuckets[bucketIndex].size() != 0){
 
@@ -104,7 +104,7 @@ bool HashMap<key_type, value_type>::deleteElement(key_type key)
 {
 
     size_type bucketIndex = hashFunction(key) % mBucketNum;
-    std::cout << "[SUCCESS] The key is hashed, bucket index is: " << bucketIndex << std::endl;
+    //std::cout << "[SUCCESS] The key is hashed, bucket index is: " << bucketIndex << std::endl;
 
     if (mBuckets[bucketIndex].size() != 0){
         auto & bucket = mBuckets[bucketIndex];
