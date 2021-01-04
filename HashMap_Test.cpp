@@ -24,12 +24,16 @@ int main(){
     auto key = "ester";
     auto value = hmap.search(key);
     if(value.has_value())
-        std::cout << "Value for " << key << ": " << value.value() << std::endl;
+        std::cout << "[INFO] The element exists: (" << key << ", " << value.value() << ")" << std::endl;
+    else
+        std::cout << "[INFO] An element with key:" << key << " doesn't exist !" << std::endl;
 
     key = "marie";
     value = hmap.search(key);
     if(value.has_value())
-        std::cout << "Value for " << key << ": " << value.value() << std::endl;
+        std::cout << "[INFO] The element exists: (" << key << ", " << value.value() << ")" << std::endl;
+    else
+        std::cout << "[INFO] An element with key:" << key << " doesn't exist !" << std::endl;
 
     std::cout << std::endl;
 

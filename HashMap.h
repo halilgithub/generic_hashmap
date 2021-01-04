@@ -68,13 +68,13 @@ typename HashMap<key_type, value_type>::optional_type HashMap<key_type, value_ty
         for (it = begin(bucket); it != end(bucket); ++it)
         {
             if (it->first == key){
-                std::cout << "[INFO] The element exists: (" << it->first << ", " << it->second << ")" << std::endl;
+                //std::cout << "[INFO] The element exists: (" << it->first << ", " << it->second << ")" << std::endl;
                 return it->second;
             }
         }
     }
 
-    std::cout << "[INFO] The element with key:" << key << " doesn't exist !" << std::endl;
+    //std::cout << "[INFO] The element with key:" << key << " doesn't exist !" << std::endl;
     return std::nullopt;
 
 }
@@ -85,7 +85,7 @@ bool HashMap<key_type, value_type>::insert(key_type key, value_type value)
     auto mapped_value = search(key);
 
     if (mapped_value.has_value()){
-        std::cout << "[ERROR] The element couldn't be inserted, key already exists !" << std::endl;
+        std::cout << "[ERROR] The element (" << key << ", " << value << ") couldn't be inserted, key already exists !" << std::endl;
         return false;  //  insert operation is unsuccessfull
     }
     else
@@ -93,7 +93,7 @@ bool HashMap<key_type, value_type>::insert(key_type key, value_type value)
         size_type bucketIndex = hashFunction(key) % mBucketNum;
         std::pair <key_type,value_type> element = std::make_pair(key,value);
         mBuckets[bucketIndex].emplace_back(element);
-        std::cout << "[SUCCESS] The element has been inserted !" << std::endl;
+        std::cout << "[SUCCESS] The element (" << key << ", " << value << ") has been inserted !" << std::endl;
         ++mElementNum;
         return true;  // insert operation is successfull
     }
@@ -112,14 +112,14 @@ bool HashMap<key_type, value_type>::deleteElement(key_type key)
         {
             if (it->first == key){
                 bucket.erase(it);
-                std::cout << "[SUCCESS] The element has been deleted !" << std::endl;
+                std::cout << "[SUCCESS] The element (" << key << ", " << it->second << ") has been deleted !" << std::endl;
                 --mElementNum;
                 return true;  // delete operation is successfull
             }
         }
     }
 
-    std::cout << "[ERROR] The element couldn't be deleted, key doesn't exist !" << std::endl;
+    std::cout << "[ERROR] The key:" << key << " couldn't be deleted, key doesn't exist !" << std::endl;
     return false;  //  delete operation is unsuccessfull
 
 }
