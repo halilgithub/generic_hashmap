@@ -2,12 +2,13 @@
 
 #include <string>
 #include <list>
-#include <vector>
+#include <array>
 #include <optional>
 #include <iostream>
 #include <stdexcept>
 #include <iterator>
 #include <sstream>
+#include <utility>
 
 
 template <typename key_type, typename value_type>
@@ -31,14 +32,20 @@ public:
     void printHashMap();
 
 private:
+
     size_type mSize = 0;
-    std::vector<list_type> mBuckets;
+    static const size_type mBucketNum = 401;
+    std::array<list_type, mBucketNum> mBuckets;
 };
 
 
 template <typename key_type, typename value_type>
 bool HashMap<key_type, value_type>::isEmpty() const
 {
+    std::cout<<"size of vector: "<<mBuckets.size()<<std::endl;
+    //std::cout<<"capacity of vector: "<<mBuckets.capacity()<<std::endl;
+    std::cout<<"capacity of vector: "<<mBuckets.max_size()<<std::endl;
+
     return (mSize == 0);
 }
 
@@ -47,17 +54,18 @@ typename HashMap<key_type, value_type>::size_type HashMap<key_type, value_type>:
 {
     std::string str_key = static_cast<std::ostringstream*>(&(std::ostringstream() << key))->str();
     size_type hash_output = std::hash<std::string>()(str_key);
-    std::cout << "[SUCCESS] The key is hashed: " << hash_output << std::endl;
     return hash_output;
 }
 
 template <typename key_type, typename value_type>
 typename HashMap<key_type, value_type>::optional_type HashMap<key_type, value_type>::search(key_type key)
 {
-    size_type hash_output = hashFunction(key);
-    try{
+    size_type bucketIndex = hashFunction(key) % mBucketNum;
+    std::cout << "[SUCCESS] The key is hashed, bucket index is: " << bucketIndex << std::endl;
+
+    if (mBuckets[bucketIndex].size() != 0){
         std::cout << "111" << std::endl;
-        auto & bucket = mBuckets[hash_output];
+        auto & bucket = mBuckets[bucketIndex];
         std::cout << "222" << std::endl;
         typename HashMap<key_type, value_type>::list_type::iterator it;
         for (it = begin(bucket); it != end(bucket); ++it)
@@ -68,19 +76,18 @@ typename HashMap<key_type, value_type>::optional_type HashMap<key_type, value_ty
                 return it->second;
             }
         }
-
-        std::cout << "[INFO] The element with key=" << key << "doesn't exist !" << std::endl;
-        return std::nullopt;
-    }catch(std::exception &ex){
-        std::cout << ex.what() << std::endl;
-        return std::nullopt;
     }
+
+    std::cout << "[INFO] The element with key:" << key << " doesn't exist !" << std::endl;
+    return std::nullopt;
+
 }
 
 template <typename key_type, typename value_type>
 bool HashMap<key_type, value_type>::insert(key_type key, value_type value)
 {
     auto mapped_value = search(key);
+    std::cout << "111" << std::endl;
 
     if (mapped_value.has_value()){
         std::cout << "[ERROR] The element couldn't be inserted, key already exists !" << std::endl;
@@ -88,16 +95,15 @@ bool HashMap<key_type, value_type>::insert(key_type key, value_type value)
     }
     else
     {
-        try{
-            size_type hash_output = hashFunction(key);
-            mBuckets[hash_output].emplace_back(key,value);
-            std::cout << "[SUCCESS] The element has been inserted !" << std::endl;
-            ++mSize;
-            return true;  // insert operation is successfull
-        }catch (std::exception &ex){
-            std::cout << ex.what() << std::endl;
-            return false;
-        }
+        size_type bucketIndex = hashFunction(key) % mBucketNum;
+        std::cout << "222" << std::endl;
+        std::pair <key_type,value_type> element = std::make_pair(key,value);
+        std::cout << "333" << std::endl;
+        mBuckets[bucketIndex].emplace_back(element);
+        std::cout << "444" << std::endl;
+        std::cout << "[SUCCESS] The element has been inserted !" << std::endl;
+        ++mSize;
+        return true;  // insert operation is successfull
     }
 }
 
@@ -105,16 +111,19 @@ template <typename key_type, typename value_type>
 bool HashMap<key_type, value_type>::deleteElement(key_type key)
 {
 
-    size_type hash_output = hashFunction(key);
-    auto & bucket = mBuckets[hash_output];
+    size_type bucketIndex = hashFunction(key) % mBucketNum;
+    std::cout << "[SUCCESS] The key is hashed, bucket index is: " << bucketIndex << std::endl;
 
-    for (auto it = begin(bucket); it != end(bucket); ++it)
-    {
-        if (it->first == key){
-            bucket.erase(it);
-            std::cout << "[SUCCESS] The element has been deleted !" << std::endl;
-            --mSize;
-            return true;  // delete operation is successfull
+    if (mBuckets[bucketIndex].size() != 0){
+        auto & bucket = mBuckets[bucketIndex];
+        for (auto it = begin(bucket); it != end(bucket); ++it)
+        {
+            if (it->first == key){
+                bucket.erase(it);
+                std::cout << "[SUCCESS] The element has been deleted !" << std::endl;
+                --mSize;
+                return true;  // delete operation is successfull
+            }
         }
     }
 
@@ -129,13 +138,16 @@ void HashMap<key_type, value_type>::printHashMap()
     std::cout << "Printing all the elements in the HashMap" << std::endl;
     std::cout << "--------------------------------------------------" << std::endl;
 
-    for(auto it_vector = begin(mBuckets); it_vector != end(mBuckets); ++it_vector)
+    for(size_type bucketIndex = 0; bucketIndex < mBucketNum; bucketIndex++)
     {
-        size_type bucketIndex = std::distance(begin(mBuckets), it_vector);
-        std::cout << "Bucket[" << bucketIndex << "]:" << std::endl;
-        for (auto it_list = begin(it_vector); it_list != end(it_vector); ++it_list)
-            std::cout << "\t(" << it_list->first << ", " << it_list->second << ")" << std::endl;
-        std::cout << std::endl;
+        //size_type bucketIndex = std::distance(begin(mBuckets), it_array);
+        if (mBuckets[bucketIndex].size() != 0){
+            std::cout << "Bucket[" << bucketIndex << "]:" << std::endl;
+            auto & bucket = mBuckets[bucketIndex];
+            for (auto it_list = begin(bucket); it_list != end(bucket); ++it_list)
+                std::cout << "\t(" << it_list->first << ", " << it_list->second << ")" << std::endl;
+            std::cout << std::endl;
+        }
     }
 }
 

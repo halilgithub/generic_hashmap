@@ -1,6 +1,5 @@
 #include <iostream>
 #include "HashMap.h"
-#include <typeinfo>
 
 
 int main(){
@@ -14,8 +13,12 @@ int main(){
         std::cout << "Hashmap is not empty" << std::endl;
 
     bool success = hmap.insert("halil",12);
+    success = hmap.insert("hali",13);
+    success = hmap.insert("hall",14);
+    success = hmap.insert("hail",15);
+    success = hmap.insert("hail",16);
     std::cout << success << std::endl;
-    //hmap.printHashMap();
+    hmap.printHashMap();
 
     return 0;
 }
