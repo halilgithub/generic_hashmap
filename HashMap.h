@@ -101,7 +101,6 @@ bool HashMap<key_type, value_type>::deleteElement(key_type key)
 {
 
     size_type bucketIndex = hashFunction(key) % mBucketNum;
-    //std::cout << "[SUCCESS] The key is hashed, bucket index is: " << bucketIndex << std::endl;
 
     if (mBuckets[bucketIndex].size() != 0){
         auto & bucket = mBuckets[bucketIndex];
@@ -138,7 +137,6 @@ void HashMap<key_type, value_type>::printHashMap()
             std::cout << std::endl;
         }
     }
-    std::cout << "Total number of elements in hash map: " << mElementNum << std::endl;
-    std::cout << std::endl;
+    std::cout << "Total number of elements in hash map: " << mElementNum << std::endl << std::endl;
 }
 
